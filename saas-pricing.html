@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智云服务 - 小程序SaaS平台</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        * {
+            font-family: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Fredoka', 'Nunito', sans-serif;
+        }
+        
+        /* 活泼动画效果 */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(99, 102, 241, 0.3); }
+            50% { box-shadow: 0 0 40px rgba(99, 102, 241, 0.5); }
+        }
+        
+        @keyframes confetti {
+            0% { transform: translateY(-100%) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+        
+        .float-animation {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        .pulse-glow {
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+        
+        /* 马年春节装饰 */
+        .cny-decoration {
+            background: linear-gradient(135deg, #DC2626 0%, #991B1B 100%);
+            position: relative;
+        }
+        
+        .cny-decoration::before,
+        .cny-decoration::after {
+            content: '🧧';
+            position: absolute;
+            font-size: 2rem;
+            opacity: 0.3;
+        }
+        
+        .cny-decoration::before {
+            top: 10px;
+            left: 10px;
+            transform: rotate(-15deg);
+        }
+        
+        .cny-decoration::after {
+            top: 10px;
+            right: 10px;
+            transform: rotate(15deg);
+        }
+        
+        /* 卡片悬停效果 */
+        .pricing-card {
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        
+        .pricing-card:hover {
+            transform: translateY(-8px);
+        }
+        
+        /* 价格标签样式 */
+        .price-badge {
+            background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
+        }
+        
+        /* 渐变背景 */
+        .gradient-bg {
+            background: linear-gradient(135deg, #F5F3FF 0%, #EEF2FF 50%, #F0FDF4 100%);
+        }
+        
+        /* 玻璃态效果 */
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        /* 特色功能图标容器 */
+        .feature-icon {
+            background: linear-gradient(135deg, #6366F1 0%, #818CF8 100%);
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+        }
+        
+        /* 更好版 - 春节限定 */
+        .cny-limited {
+            background: linear-gradient(135deg, #DC2626 0%, #B91C1C 50%, #F59E0B 100%);
+            color: white;
+        }
+        
+        .cny-limited .feature-icon {
+            background: linear-gradient(135deg, #F59E0B 0%, #FBBF24 100%);
+        }
+        
+        /* 敬请期待遮罩 */
+        .coming-soon-overlay {
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(4px);
+        }
+        
+        /* 响应式调整 */
+        @media (max-width: 768px) {
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen">
+    <!-- 导航栏 -->
+    <nav class="glass-effect fixed top-0 left-0 right-0 z-50 px-6 py-4">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 feature-icon rounded-xl flex items-center justify-center">
+                    <i data-lucide="rocket" class="text-white w-6 h-6"></i>
+                </div>
+                <span class="text-2xl font-bold text-indigo-900">智云服务</span>
+                <span class="px-2 py-1 bg-amber-100 text-amber-700 text-xs font-semibold rounded-full border border-amber-200">
+                    马年限定
+                </span>
+            </div>
+            <div class="hidden md:flex gap-6">
+                <a href="#features" class="text-slate-600 hover:text-indigo-600 font-medium transition-colors">功能特性</a>
+                <a href="#pricing" class="text-slate-600 hover:text-indigo-600 font-medium transition-colors">定价方案</a>
+                <a href="#tech" class="text-slate-600 hover:text-indigo-600 font-medium transition-colors">技术架构</a>
+            </div>
+            <button class="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-full transition-all hover:shadow-lg">
+                立即咨询
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero 区域 -->
+    <section class="pt-32 pb-20 px-6">
+        <div class="max-w-7xl mx-auto text-center">
+            <div class="inline-flex items-center gap-2 px-4 py-2 bg-amber-100 text-amber-800 rounded-full text-sm font-semibold mb-6 border border-amber-200">
+                <i data-lucide="sparkles" class="w-4 h-4"></i>
+                马年新春特惠活动进行中
+            </div>
+            <h1 class="text-5xl md:text-7xl font-bold text-indigo-950 mb-6 leading-tight">
+                智云服务
+                <span class="block text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-emerald-500">
+                    小程序SaaS平台
+                </span>
+            </h1>
+            <p class="text-xl text-slate-600 max-w-2xl mx-auto mb-10 leading-relaxed">
+                简洁UI、企业级安全、高并发支持。专为小程序打造的一站式解决方案，助力您的业务腾飞！
+            </p>
+            <div class="flex flex-wrap justify-center gap-4">
+                <button class="px-8 py-4 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-full text-lg transition-all hover:shadow-xl hover:scale-105 flex items-center gap-2">
+                    <i data-lucide="zap" class="w-5 h-5"></i>
+                    选择适合您的方案
+                </button>
+                <button class="px-8 py-4 bg-white hover:bg-gray-50 text-indigo-900 font-bold rounded-full text-lg border-2 border-indigo-200 transition-all flex items-center gap-2">
+                    <i data-lucide="play-circle" class="w-5 h-5"></i>
+                    查看演示
+                </button>
+            </div>
+            
+            <!-- 装饰性元素 -->
+            <div class="mt-16 relative">
+                <div class="absolute -top-10 left-1/4 w-20 h-20 bg-indigo-200 rounded-full opacity-50 float-animation"></div>
+                <div class="absolute top-10 right-1/4 w-16 h-16 bg-emerald-200 rounded-full opacity-50 float-animation" style="animation-delay: 1s;"></div>
+                <div class="absolute -bottom-5 left-1/3 w-12 h-12 bg-amber-200 rounded-full opacity-50 float-animation" style="animation-delay: 2s;"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 功能特性 -->
+    <section id="features" class="py-20 px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-indigo-950 mb-4">为什么选择智云服务？</h2>
+                <p class="text-lg text-slate-600">领先的技术栈，为您的业务保驾护航</p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- 前端特性 -->
+                <div class="glass-effect rounded-2xl p-8 hover:shadow-xl transition-shadow">
+                    <div class="w-14 h-14 feature-icon rounded-xl flex items-center justify-center mb-6">
+                        <i data-lucide="smartphone" class="text-white w-7 h-7"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-indigo-900 mb-3">自研轻量级状态管理</h3>
+                    <p class="text-slate-600 leading-relaxed">
+                        专为小程序优化的状态管理方案，轻量高效，无需引入 Redux 等重型框架，减少包体积，提升运行速度。
+                    </p>
+                </div>
+                
+                <div class="glass-effect rounded-2xl p-8 hover:shadow-xl transition-shadow">
+                    <div class="w-14 h-14 feature-icon rounded-xl flex items-center justify-center mb-6">
+                        <i data-lucide="database" class="text-white w-7 h-7"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-indigo-900 mb-3">智能请求缓存</h3>
+                    <p class="text-slate-600 leading-relaxed">
+                        自动缓存 API 请求结果，减少重复请求，降低服务器压力，提升用户体验，智能过期策略确保数据新鲜度。
+                    </p>
+                </div>
+                
+                <div class="glass-effect rounded-2xl p-8 hover:shadow-xl transition-shadow">
+                    <div class="w-14 h-14 feature-icon rounded-xl flex items-center justify-center mb-6">
+                        <i data-lucide="image" class="text-white w-7 h-7"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-indigo-900 mb-3">图片懒加载优化</h3>
+                    <p class="text-slate-600 leading-relaxed">
+                        图片进入可视区域才加载，大幅缩短首屏时间，节省流量消耗，流畅的占位符过渡动画提升视觉体验。
+                    </p>
+                </div>
+                
+                <!-- 后端特性 -->
+                <div class="glass-effect rounded-2xl p-8 hover:shadow-xl transition-shadow">
+                    <div class="w-14 h-14 feature-icon rounded-xl flex items-center justify-center mb-6">
+                        <i data-lucide="server" class="text-white w-7 h-7"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-indigo-900 mb-3">Express + MySQL</h3>
+                    <p class="text-slate-600 leading-relaxed">
+                        成熟稳定的 Node.js 后端架构，配合 MySQL 关系型数据库，支持高并发访问，确保数据安全可靠。
+                    </p>
+                </div>
+                
+                <div class="glass-effect rounded-2xl p-8 hover:shadow-xl transition-shadow">
+                    <div class="w-14 h-14 feature-icon rounded-xl flex items-center justify-center mb-6">
+                        <i data-lucide="shield-check" class="text-white w-7 h-7"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-indigo-900 mb-3">JWT 认证安全</h3>
+                    <p class="text-slate-600 leading-relaxed">
+                        企业级 JSON Web Token 认证机制，支持 Token 自动刷新，防止 CSRF 攻击，保护您的用户数据安全。
+                    </p>
+                </div>
+                
+                <div class="glass-effect rounded-2xl p-8 hover:shadow-xl transition-shadow">
+                    <div class="w-14 h-14 feature-icon rounded-xl flex items-center justify-center mb-6">
+                        <i data-lucide="zap" class="text-white w-7 h-7"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-indigo-900 mb-3">高性能架构</h3>
+                    <p class="text-slate-600 leading-relaxed">
+                        优化的数据库索引设计，支持读写分离，水平扩展能力强，轻松应对百万级用户并发访问。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 定价方案 -->
+    <section id="pricing" class="py-20 px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-indigo-950 mb-4">选择适合您的方案</h2>
+                <p class="text-lg text-slate-600">灵活的定价，满足不同规模企业的需求</p>
+            </div>
+            
+            <div class="pricing-grid grid lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                <!-- Base 版本 -->
+                <div class="pricing-card glass-effect rounded-3xl overflow-hidden border-2 border-transparent hover:border-indigo-300">
+                    <div class="p-8">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center">
+                                <i data-lucide="package" class="w-6 h-6 text-indigo-600"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-2xl font-bold text-indigo-900">Base 版</h3>
+                                <p class="text-sm text-slate-500">适合初创团队</p>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <span class="text-4xl font-bold text-indigo-950">¥2,500</span>
+                            <span class="text-slate-500">/年</span>
+                        </div>
+                        
+                        <ul class="space-y-4 mb-8">
+                            <li class="flex items-start gap-3">
+                                <i data-lucide="check-circle" class="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5"></i>
+                                <span class="text-slate-700">基础功能完整支持</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i data-lucide="check-circle" class="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5"></i>
+                                <span class="text-slate-700">简洁现代化 UI 设计</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i data-lucide="check-circle" class="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5"></i>
+                                <span class="text-slate-700">企业级 JWT 认证安全</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i data-lucide="check-circle" class="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5"></i>
+                                <span class="text-slate-700">自研轻量级状态管理</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i data-lucide="check-circle" class="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5"></i>
+                                <span class="text-slate-700">请求缓存优化</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i data-lucide="check-circle" class="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5"></i>
+                                <span class="text-slate-700">图片懒加载支持</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i data-lucide="check-circle" class="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5"></i>
+                                <span class="text-slate-700">Express + MySQL 后端</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i data-lucide="check-circle" class="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5"></i>
+                                <span class="text-slate-700">邮件技术支持</span>
+                            </li>
+                        </ul>
+                        
+                        <button class="w-full py-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl transition-all hover:shadow-lg">
+                            选择 Base 版
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Better 版本 - 推荐 -->
+                <div class="pricing-card cny-limited rounded-3xl overflow-hidden relative transform lg:scale-105 pulse-glow">
+                    <!-- 推荐标签 -->
+                    <div class="absolute top-4 right-4">
+                        <span class="px-3 py-1 bg-amber-400 text-amber-900 text-xs font-bold rounded-full">
+                            春节特惠 🔥
+                        </span>
+                    </div>
+                    
+                    <div class="p-8">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur">
+                                <i data-lucide="crown" class="w-6 h-6 text-amber-300"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-2xl font-bold">Better 版</h3>
+                                <p class="text-sm text-white/80">马年限定版</p>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <span class="text-4xl font-bold">¥3,000</span>
+                            <span class="text-white/80">/年</span>
+                            <div class="text-sm text-amber-200 mt-1">
+                                <span class="line-through opacity-60">原价 ¥4,500</span>
+                                <span class="ml-2 font-semibold">立省 ¥1,500</span>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4 p-3 bg-white/10 rounded-xl backdrop-blur">
+                            <p class="text-sm text-amber-100">
+                                <i data-lucide="sparkles" class="w-4 h-4 inline mr-1"></i>
+                                包含 Base 版全部功能
+                            </p>
+                        </div>
+                        
+                        <ul class="space-y-4 mb-8">
+                            <li class="flex items-start gap-3">
+                                <i data-lucide="check-circle" class="w-5 h-5 text-amber-300 flex-shrink-0 mt-0.5"></i>
+                                <span class="text-white/90">企业级高并发架构</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i data-lucide="check-circle" class="w-5 h-5 text-amber-300 flex-shrink-0 mt-0.5"></i>
+                                <span class="text-white/90">高级数据管理能力</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i data-lucide="check-circle" class="w-5 h-5 text-amber-300 flex-shrink-0 mt-0.5"></i>
+                                <span class="text-white/90">AI+ 智能功能集成</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i data-lucide="check-circle" class="w-5 h-5 text-amber-300 flex-shrink-0 mt-0.5"></i>
+                                <span class="text-white/90">多种 UI 主题风格</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i data-lucide="check-circle" class="w-5 h-5 text-amber-300 flex-shrink-0 mt-0.5"></i>
+                                <span class="text-amber-200 font-semibold">马年春节限定 UI 🐴</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i data-lucide="check-circle" class="w-5 h-5 text-amber-300 flex-shrink-0 mt-0.5"></i>
+                                <span class="text-white/90">专业数据看板系统</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i data-lucide="check-circle" class="w-5 h-5 text-amber-300 flex-shrink-0 mt-0.5"></i>
+                                <span class="text-white/90">优先技术支持响应</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i data-lucide="check-circle" class="w-5 h-5 text-amber-300 flex-shrink-0 mt-0.5"></i>
+                                <span class="text-white/90">专属客户经理服务</span>
+                            </li>
+                        </ul>
+                        
+                        <button class="w-full py-4 bg-amber-400 hover:bg-amber-300 text-amber-900 font-bold rounded-xl transition-all hover:shadow-xl">
+                            选择 Better 版
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Best 版本 - 敬请期待 -->
+                <div class="pricing-card glass-effect rounded-3xl overflow-hidden relative">
+                    <!-- 敬请期待遮罩 -->
+                    <div class="coming-soon-overlay absolute inset-0 z-10 flex flex-col items-center justify-center rounded-3xl">
+                        <div class="text-center">
+                            <div class="w-20 h-20 bg-white/10 rounded-full flex items-center justify-center mb-4 mx-auto">
+                                <i data-lucide="clock" class="w-10 h-10 text-white"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold text-white mb-2">敬请期待</h3>
+                            <p class="text-white/80 text-sm">Best 版本正在精心打造中</p>
+                            <button class="mt-6 px-6 py-2 bg-white/20 hover:bg-white/30 text-white rounded-full text-sm font-medium transition-colors backdrop-blur">
+                                预约提醒
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="p-8 opacity-50">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center">
+                                <i data-lucide="gem" class="w-6 h-6 text-white"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-2xl font-bold text-indigo-900">Best 版</h3>
+                                <p class="text-sm text-slate-500">旗舰版</p>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <span class="text-4xl font-bold text-indigo-950">???</span>
+                            <span class="text-slate-500">/年</span>
+                        </div>
+                        
+                        <ul class="space-y-4 mb-8">
+                            <li class="flex items-start gap-3">
+                                <i data-lucide="check-circle" class="w-5 h-5 text-slate-400 flex-shrink-0 mt-0.5"></i>
+                                <span class="text-slate-600">更多高级功能即将推出</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i data-lucide="check-circle" class="w-5 h-5 text-slate-400 flex-shrink-0 mt-0.5"></i>
+                                <span class="text-slate-600">专属定制开发支持</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i data-lucide="check-circle" class="w-5 h-5 text-slate-400 flex-shrink-0 mt-0.5"></i>
+                                <span class="text-slate-600">7×24小时技术支持</span>
+                            </li>
+                        </ul>
+                        
+                        <button disabled class="w-full py-4 bg-slate-300 text-slate-500 font-bold rounded-xl cursor-not-allowed">
+                            即将推出
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 技术架构详情 -->
+    <section id="tech" class="py-20 px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-indigo-950 mb-4">技术架构</h2>
+                <p class="text-lg text-slate-600">稳定可靠，性能卓越</p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- 前端架构 -->
+                <div class="glass-effect rounded-3xl p-8">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-12 h-12 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-xl flex items-center justify-center">
+                            <i data-lucide="layout" class="w-6 h-6 text-white"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-indigo-900">前端架构</h3>
+                    </div>
+                    
+                    <div class="space-y-6">
+                        <div class="flex gap-4">
+                            <div class="w-10 h-10 bg-cyan-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="layers" class="w-5 h-5 text-cyan-600"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-indigo-900 mb-1">自研轻量级状态管理</h4>
+                                <p class="text-slate-600 text-sm">专为小程序场景设计，API 简洁易用，无冗余依赖，包体积极小。</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex gap-4">
+                            <div class="w-10 h-10 bg-cyan-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="refresh-cw" class="w-5 h-5 text-cyan-600"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-indigo-900 mb-1">智能请求缓存</h4>
+                                <p class="text-slate-600 text-sm">LRU 缓存策略，支持内存+本地双缓存，TTL 自动过期，命中率高达 90%。</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex gap-4">
+                            <div class="w-10 h-10 bg-cyan-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="image" class="w-5 h-5 text-cyan-600"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-indigo-900 mb-1">图片懒加载优化</h4>
+                                <p class="text-slate-600 text-sm">IntersectionObserver API 实现，支持占位图、加载动画、错误处理。</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex gap-4">
+                            <div class="w-10 h-10 bg-cyan-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="cpu" class="w-5 h-5 text-cyan-600"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-indigo-900 mb-1">性能优化</h4>
+                                <p class="text-slate-600 text-sm">分包加载、预加载策略、渲染优化，确保流畅的用户体验。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 后端架构 -->
+                <div class="glass-effect rounded-3xl p-8">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-12 h-12 bg-gradient-to-br from-emerald-400 to-teal-500 rounded-xl flex items-center justify-center">
+                            <i data-lucide="server" class="w-6 h-6 text-white"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-indigo-900">后端架构</h3>
+                    </div>
+                    
+                    <div class="space-y-6">
+                        <div class="flex gap-4">
+                            <div class="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="code" class="w-5 h-5 text-emerald-600"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-indigo-900 mb-1">Express.js 框架</h4>
+                                <p class="text-slate-600 text-sm">轻量灵活的 Node.js Web 框架，中间件生态丰富，开发效率高。</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex gap-4">
+                            <div class="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="database" class="w-5 h-5 text-emerald-600"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-indigo-900 mb-1">MySQL 数据库</h4>
+                                <p class="text-slate-600 text-sm">成熟的关系型数据库，支持事务、索引优化、读写分离、主从复制。</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex gap-4">
+                            <div class="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="shield" class="w-5 h-5 text-emerald-600"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-indigo-900 mb-1">JWT 认证安全</h4>
+                                <p class="text-slate-600 text-sm">基于 RS256 非对称加密，Access Token + Refresh Token 双令牌机制。</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex gap-4">
+                            <div class="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="zap" class="w-5 h-5 text-emerald-600"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-indigo-900 mb-1">高并发支持</h4>
+                                <p class="text-slate-600 text-sm">连接池管理、Redis 缓存、CDN 加速，轻松应对流量高峰。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA 区域 -->
+    <section class="py-20 px-6">
+        <div class="max-w-4xl mx-auto">
+            <div class="glass-effect rounded-3xl p-12 text-center relative overflow-hidden">
+                <!-- 装饰 -->
+                <div class="absolute -top-20 -right-20 w-40 h-40 bg-indigo-200 rounded-full opacity-30"></div>
+                <div class="absolute -bottom-20 -left-20 w-40 h-40 bg-emerald-200 rounded-full opacity-30"></div>
+                
+                <div class="relative z-10">
+                    <h2 class="text-4xl font-bold text-indigo-950 mb-4">准备好开始了吗？</h2>
+                    <p class="text-lg text-slate-600 mb-8 max-w-xl mx-auto">
+                        立即选择适合您的方案，开启小程序 SaaS 之旅。Better 版马年限定特惠，机会难得！
+                    </p>
+                    <div class="flex flex-wrap justify-center gap-4">
+                        <button class="px-8 py-4 bg-gradient-to-r from-indigo-600 to-emerald-500 hover:from-indigo-700 hover:to-emerald-600 text-white font-bold rounded-full text-lg transition-all hover:shadow-xl flex items-center gap-2">
+                            <i data-lucide="message-circle" class="w-5 h-5"></i>
+                            联系销售顾问
+                        </button>
+                        <button class="px-8 py-4 bg-white hover:bg-gray-50 text-indigo-900 font-bold rounded-full text-lg border-2 border-indigo-200 transition-all flex items-center gap-2">
+                            <i data-lucide="calendar" class="w-5 h-5"></i>
+                            预约演示
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="py-12 px-6 border-t border-indigo-100">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid md:grid-cols-4 gap-8 mb-8">
+                <div>
+                    <div class="flex items-center gap-2 mb-4">
+                        <div class="w-8 h-8 feature-icon rounded-lg flex items-center justify-center">
+                            <i data-lucide="rocket" class="text-white w-4 h-4"></i>
+                        </div>
+                        <span class="text-xl font-bold text-indigo-900">智云服务</span>
+                    </div>
+                    <p class="text-slate-600 text-sm">专业的小程序 SaaS 解决方案提供商</p>
+                </div>
+                <div>
+                    <h4 class="font-bold text-indigo-900 mb-4">产品</h4>
+                    <ul class="space-y-2 text-sm text-slate-600">
+                        <li><a href="#" class="hover:text-indigo-600">Base 版</a></li>
+                        <li><a href="#" class="hover:text-indigo-600">Better 版</a></li>
+                        <li><a href="#" class="hover:text-indigo-600">Best 版</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-indigo-900 mb-4">支持</h4>
+                    <ul class="space-y-2 text-sm text-slate-600">
+                        <li><a href="#" class="hover:text-indigo-600">技术文档</a></li>
+                        <li><a href="#" class="hover:text-indigo-600">API 参考</a></li>
+                        <li><a href="#" class="hover:text-indigo-600">常见问题</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-indigo-900 mb-4">联系我们</h4>
+                    <ul class="space-y-2 text-sm text-slate-600">
+                        <li class="flex items-center gap-2">
+                            <i data-lucide="mail" class="w-4 h-4"></i>
+                            support@zhiyun.com
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <i data-lucide="phone" class="w-4 h-4"></i>
+                            400-888-8888
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="pt-8 border-t border-indigo-100 text-center text-sm text-slate-500">
+                <p>© 2026 智云服务. 保留所有权利. 马年大吉！</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 初始化 Lucide 图标
+        lucide.createIcons();
+        
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+        
+        // 导航栏滚动效果
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 50) {
+                nav.classList.add('shadow-md');
+            } else {
+                nav.classList.remove('shadow-md');
+            }
+        });
+    </script>
+</body>
+</html>
