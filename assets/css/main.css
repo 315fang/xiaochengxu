@@ -1,0 +1,190 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-bg: #0f0f0f;
+  --color-surface: #1a1a1a;
+  --color-surface-2: #222222;
+  --color-border: #2a2a2a;
+  --color-gold: #C6A16E;
+  --color-gold-light: #d4b48a;
+  --color-text: #e5e5e5;
+  --color-text-muted: #888888;
+  --color-text-dim: #555555;
+  --color-success: #4ade80;
+  --color-warning: #fbbf24;
+  --color-danger: #f87171;
+  --color-info: #60a5fa;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: 'Inter', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background-color: var(--color-bg);
+  min-height: 100vh;
+}
+
+/* 滚动条样式 */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-surface);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 2px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-gold);
+}
+
+/* 通用卡片 */
+.card {
+  @apply rounded-xl border;
+  background: var(--color-surface);
+  border-color: var(--color-border);
+}
+
+/* 金色文字 */
+.text-gold {
+  color: var(--color-gold);
+}
+
+/* 金色渐变 */
+.gradient-gold {
+  background: linear-gradient(135deg, #C6A16E, #8B6914);
+}
+
+/* 金色边框发光 */
+.border-gold-glow {
+  border-color: var(--color-gold);
+  box-shadow: 0 0 12px rgba(198, 161, 110, 0.2);
+}
+
+/* 按钮基础 */
+.btn {
+  @apply inline-flex items-center justify-center rounded-lg px-4 py-2 text-sm font-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed;
+}
+
+.btn-gold {
+  @apply btn;
+  background: linear-gradient(135deg, #C6A16E, #8B6914);
+  color: #fff;
+}
+.btn-gold:hover {
+  background: linear-gradient(135deg, #d4b48a, #9a7620);
+  box-shadow: 0 0 16px rgba(198, 161, 110, 0.3);
+}
+
+.btn-outline {
+  @apply btn;
+  background: transparent;
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+}
+.btn-outline:hover {
+  border-color: var(--color-gold);
+  color: var(--color-gold);
+}
+
+.btn-ghost {
+  @apply btn;
+  background: transparent;
+  color: var(--color-text-muted);
+}
+.btn-ghost:hover {
+  background: var(--color-surface-2);
+  color: var(--color-text);
+}
+
+/* 输入框 */
+.input {
+  @apply w-full rounded-lg px-3 py-2 text-sm outline-none transition-all duration-200;
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+}
+.input:focus {
+  border-color: var(--color-gold);
+  box-shadow: 0 0 0 2px rgba(198, 161, 110, 0.1);
+}
+.input::placeholder {
+  color: var(--color-text-dim);
+}
+
+/* 标签 */
+.badge {
+  @apply inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium;
+}
+.badge-frozen    { background: rgba(96,165,250,0.15); color: #60a5fa; }
+.badge-pending   { background: rgba(251,191,36,0.15); color: #fbbf24; }
+.badge-approved  { background: rgba(198,161,110,0.15); color: #C6A16E; }
+.badge-settled   { background: rgba(74,222,128,0.15); color: #4ade80; }
+.badge-cancelled { background: rgba(107,114,128,0.15); color: #9ca3af; }
+.badge-rejected  { background: rgba(248,113,113,0.15); color: #f87171; }
+
+/* 分割线 */
+.divider {
+  @apply border-t;
+  border-color: var(--color-border);
+}
+
+/* 渐变背景动画（首页用） */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+.float-animation {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* 渐变文字 */
+.gradient-text {
+  background: linear-gradient(135deg, #C6A16E, #e8c99a, #8B6914);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* 表格 */
+.table-base {
+  @apply w-full text-sm;
+}
+.table-base th {
+  @apply px-4 py-3 text-left text-xs font-medium uppercase tracking-wider;
+  color: var(--color-text-muted);
+  border-bottom: 1px solid var(--color-border);
+}
+.table-base td {
+  @apply px-4 py-3;
+  border-bottom: 1px solid rgba(42,42,42,0.6);
+}
+.table-base tr:hover td {
+  background: rgba(255,255,255,0.02);
+}
+
+/* 页面过渡 */
+.page-enter-active,
+.page-leave-active {
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.page-enter-from {
+  opacity: 0;
+  transform: translateY(8px);
+}
+.page-leave-to {
+  opacity: 0;
+}
